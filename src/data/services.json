@@ -7,14 +7,5 @@
     "price": 1500,
     "category": "Barbería",
     "available": true
-  },
-  {
-    "id": 2,
-    "name": "Corte de Cabello",
-    "description": "Corte moderno estilo Fade",
-    "duration": 30,
-    "price": 1500,
-    "category": "Barbería",
-    "available": true
   }
 ]
