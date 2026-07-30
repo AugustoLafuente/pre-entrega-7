@@ -4,8 +4,17 @@
     "name": "Corte de Cabello",
     "description": "Corte moderno estilo Fade",
     "duration": 30,
-    "price": 1500,
+    "price": 4900,
     "category": "Barbería",
+    "available": false
+  },
+  {
+    "id": 2,
+    "name": "Masaje Descontracturante",
+    "description": "Sesión intensiva para aliviar tensiones en espalda y cuello",
+    "duration": 50,
+    "price": 4200,
+    "category": "Salud",
     "available": true
   }
 ]
