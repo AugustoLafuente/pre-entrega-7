@@ -4,6 +4,16 @@ import { ServiceManager } from '../managers/ServiceManager.js';
 const router = Router();
 const manager = new ServiceManager();
 
+const handleError = (error, res) => {
+  if (error.message.includes('no existe')) {
+    return res.status(404).json({ status: 'error', message: error.message });
+  }
+  if (error.message.includes('obligatorio') || error.message.includes('no está permitido')) {
+    return res.status(400).json({ status: 'error', message: error.message });
+  }
+  return res.status(500).json({ status: 'error', message: error.message });
+};
+
 // GET /api/services - Devuelve todos los servicios (Acepta filtros por query params)
 router.get('/', async (req, res) => {
   try {
@@ -23,7 +33,7 @@ router.get('/', async (req, res) => {
 
     return res.status(200).json({ status: 'success', data: services });
   } catch (error) {
-    return res.status(500).json({ status: 'error', message: error.message });
+    return handleError(error, res);
   }
 });
 
@@ -39,7 +49,7 @@ router.get('/:sid', async (req, res) => {
 
     return res.status(200).json({ status: 'success', data: service });
   } catch (error) {
-    return res.status(500).json({ status: 'error', message: error.message });
+    return handleError(error, res);
   }
 });
 
@@ -59,7 +69,7 @@ router.post('/', async (req, res) => {
 
     return res.status(201).json({ status: 'success', data: nuevoServicio });
   } catch (error) {
-    return res.status(500).json({ status: 'error', message: error.message });
+    return handleError(error, res);
   }
 });
 
@@ -80,7 +90,7 @@ router.put('/:sid', async (req, res) => {
 
     return res.status(200).json({ status: 'success', data: actualizado });
   } catch (error) {
-    return res.status(500).json({ status: 'error', message: error.message });
+    return handleError(error, res);
   }
 });
 
@@ -96,7 +106,7 @@ router.delete('/:sid', async (req, res) => {
 
     return res.status(200).json({ status: 'success', message: 'Servicio eliminado correctamente.', data: eliminado });
   } catch (error) {
-    return res.status(500).json({ status: 'error', message: error.message });
+    return handleError(error, res);
   }
 });
 

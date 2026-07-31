@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "clientName": "Augusto Lafuente",
+    "clientEmail": "Augusto@gmail.com",
+    "date": "2026-08-15",
+    "time": "15:30",
+    "status": "pending",
+    "services": [
+      {
+        "service": 2,
+        "quantity": 2
+      }
+    ]
+  }
+]

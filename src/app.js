@@ -1,6 +1,7 @@
 // Importaciones necesarias para la configuración del servidor y la gestión de servicios
 import express from 'express';
 import servicesRouter from './routes/services.router.js';
+import bookingsRouter from './routes/bookings.router.js';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Vinculación del Router al prefijo solicitado por la consigna
 app.use('/api/services', servicesRouter);
+app.use('/api/bookings', bookingsRouter);
 
 // Ruta auxiliar opcional en la raíz para verificar que el servidor responda
 app.get('/', (req, res) => {

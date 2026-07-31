@@ -62,3 +62,31 @@ npm start
 - **Método**: `DELETE`
 - **Ruta**: `/api/services/:sid`
 - **Código de respuesta**: `200 OK` si se elimina / `404 Not Found` si el ID no existe.
+
+## Endpoints de la API REST (`/api/bookings`)
+
+### 1. Crear una reserva
+- **Método**: `POST`
+- **Ruta**: `/api/bookings`
+- **Body (JSON)**:
+  ```json
+  {
+    "clientName": "Juan Perez",
+    "clientEmail": "juan@example.com",
+    "date": "2023-11-20",
+    "time": "15:00",
+    "status": "pending",
+    "services": []
+  }
+  ```
+- **Código de respuesta**: `201 Created` si tiene éxito / `400 Bad Request` si faltan campos.
+
+### 2. Obtener una reserva por ID
+- **Método**: `GET`
+- **Ruta**: `/api/bookings/:bid`
+- **Código de respuesta**: `200 OK` si existe / `404 Not Found` si no existe.
+
+### 3. Agregar un servicio a una reserva
+- **Método**: `POST`
+- **Ruta**: `/api/bookings/:bid/services/:sid`
+- **Código de respuesta**: `200 OK` si tiene éxito / `404 Not Found` si la reserva o el servicio no existen.

@@ -1,20 +1,29 @@
 [
   {
     "id": 1,
-    "name": "Corte de Cabello",
-    "description": "Corte moderno estilo Fade",
-    "duration": 30,
-    "price": 4900,
-    "category": "Barbería",
-    "available": false
+    "name": "Corte Premium",
+    "description": "Corte + barba + perfilado",
+    "duration": 60,
+    "price": 19000,
+    "category": "Peluquería",
+    "available": true
   },
   {
     "id": 2,
     "name": "Masaje Descontracturante",
     "description": "Sesión intensiva para aliviar tensiones en espalda y cuello",
-    "duration": 50,
-    "price": 4200,
+    "duration": 60,
+    "price": 35000,
     "category": "Salud",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Corte de Cabello",
+    "description": "Corte clasico para hombres",
+    "duration": 45,
+    "price": 17500,
+    "category": "Peluquería",
     "available": true
   }
 ]
