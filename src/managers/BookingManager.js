@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { ServiceManager } from './ServiceManager.js';
 
 export class BookingManager {
   constructor() {
@@ -30,6 +31,20 @@ export class BookingManager {
       throw new Error('Los campos clientName, clientEmail, date, time y status son obligatorios.');
     }
 
+    const cleanServices = [];
+    if (services && Array.isArray(services)) {
+      const serviceManager = new ServiceManager();
+      for (const s of services) {
+        const sid = typeof s === 'object' && s.service ? s.service : (typeof s === 'number' ? s : parseInt(s));
+        const qty = typeof s === 'object' && s.quantity ? s.quantity : 1;
+        
+        // Verifica existencia, si no existe arrojará error
+        await serviceManager.getServiceById(sid);
+        
+        cleanServices.push({ service: sid, quantity: qty });
+      }
+    }
+
     const bookings = await this._readJson();
     
     const nextId = bookings.length > 0 ? Math.max(...bookings.map((b) => b.id)) + 1 : 1;
@@ -41,7 +56,7 @@ export class BookingManager {
       date,
       time,
       status,
-      services: services || [],
+      services: cleanServices,
     };
 
     bookings.push(newBooking);

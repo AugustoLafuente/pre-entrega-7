@@ -1,6 +1,13 @@
-# API REST de Servicios - Sistema de Turnos y Reservas
+# API REST - Sistema de Turnos y Reservas
 
-Esta es una API REST construida con Node.js, Express y Módulos de ECMAScript (ESM) para gestionar el catálogo de servicios de un sistema de turnos. Los datos se persisten de forma asíncrona en un archivo JSON local a través de la clase `ServiceManager`.
+Esta es una API REST construida con Node.js, Express y Módulos de ECMAScript (ESM) para gestionar el catálogo de servicios de un sistema de turnos y las reservas. 
+
+## Arquitectura del Proyecto
+
+El proyecto está organizado en tres capas principales para separar responsabilidades de manera profesional:
+- **Routes (`src/routes`)**: Definen los endpoints de la aplicación y mapean las URLs y métodos HTTP a sus respectivos controladores. No contienen lógica de negocio.
+- **Controllers (`src/controllers`)**: Se encargan de procesar las solicitudes HTTP (`req`), llamar al manager correspondiente para ejecutar la lógica de datos y devolver la respuesta adecuada (`res.status().json()`).
+- **Managers (`src/managers`)**: Manejan de forma exclusiva la lógica de negocio y la persistencia de datos (asíncrona en archivos JSON locales). No utilizan componentes de Express ni conocen de `req` o `res`.
 
 ## Instalación
 
@@ -76,10 +83,16 @@ npm start
     "date": "2023-11-20",
     "time": "15:00",
     "status": "pending",
-    "services": []
+    "services": [
+      {
+        "service": 1,
+        "quantity": 2
+      }
+    ]
   }
   ```
-- **Código de respuesta**: `201 Created` si tiene éxito / `400 Bad Request` si faltan campos.
+  *(El array `services` es opcional, pero si se envía, el backend valida que los servicios existan en el `ServiceManager` y sanea el formato a `{ service, quantity }`)*
+- **Código de respuesta**: `201 Created` si tiene éxito / `400 Bad Request` si faltan campos principales / `404 Not Found` si se provee un ID de servicio inexistente.
 
 ### 2. Obtener una reserva por ID
 - **Método**: `GET`
