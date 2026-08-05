@@ -4,10 +4,12 @@ Esta es una API REST construida con Node.js, Express y Módulos de ECMAScript (E
 
 ## Arquitectura del Proyecto
 
-El proyecto está organizado en tres capas principales para separar responsabilidades de manera profesional:
-- **Routes (`src/routes`)**: Definen los endpoints de la aplicación y mapean las URLs y métodos HTTP a sus respectivos controladores. No contienen lógica de negocio.
-- **Controllers (`src/controllers`)**: Se encargan de procesar las solicitudes HTTP (`req`), llamar al manager correspondiente para ejecutar la lógica de datos y devolver la respuesta adecuada (`res.status().json()`).
-- **Managers (`src/managers`)**: Manejan de forma exclusiva la lógica de negocio y la persistencia de datos (asíncrona en archivos JSON locales). No utilizan componentes de Express ni conocen de `req` o `res`.
+El proyecto está organizado en cinco capas principales (siguiendo el patrón MVC/Capas) para separar responsabilidades de manera profesional y preparar el sistema para una base de datos más robusta:
+- **Routes (`src/routes`)**: Definen los endpoints de la aplicación y conectan las solicitudes entrantes con su controlador correspondiente.
+- **Controllers (`src/controllers`)**: Se encargan de procesar las solicitudes HTTP (`req`), llamar a los servicios y devolver la respuesta con su respectivo status HTTP (`res`).
+- **Services (`src/services`)**: Contienen toda la lógica de negocio, validaciones y reglas (como el incremento de cantidad si el servicio ya existe en la reserva). Desconocen por completo a Express (`req`/`res`).
+- **Repositories (`src/repositories`)**: Capa intermedia que sirve de puente entre los servicios y la persistencia de datos (DAO). Facilita cambiar el origen de datos en el futuro.
+- **DAO - Data Access Object (`src/dao`)**: Encargados directos de leer y escribir la información. En esta versión utilizan el File System para escribir sobre los JSON de `src/data/`.
 
 ## Instalación
 

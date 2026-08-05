@@ -1,8 +1,6 @@
-import { BookingManager } from '../managers/BookingManager.js';
-import { ServiceManager } from '../managers/ServiceManager.js';
+import { BookingsService } from '../services/bookings.service.js';
 
-const bookingManager = new BookingManager();
-const serviceManager = new ServiceManager();
+const bookingService = new BookingsService();
 
 const handleError = (error, res) => {
   if (error.message.includes('no existe')) {
@@ -17,7 +15,7 @@ const handleError = (error, res) => {
 export const createBooking = async (req, res) => {
   try {
     const bookingData = req.body;
-    const nuevaReserva = await bookingManager.createBooking(bookingData);
+    const nuevaReserva = await bookingService.createBooking(bookingData);
     return res.status(201).json({ status: 'success', data: nuevaReserva });
   } catch (error) {
     return handleError(error, res);
@@ -27,7 +25,7 @@ export const createBooking = async (req, res) => {
 export const getBookingById = async (req, res) => {
   try {
     const bid = parseInt(req.params.bid);
-    const reserva = await bookingManager.getBookingById(bid);
+    const reserva = await bookingService.getBookingById(bid);
     return res.status(200).json({ status: 'success', data: reserva });
   } catch (error) {
     return handleError(error, res);
@@ -39,11 +37,7 @@ export const addServiceToBooking = async (req, res) => {
     const bid = parseInt(req.params.bid);
     const sid = parseInt(req.params.sid);
 
-    // Validar que el servicio exista
-    await serviceManager.getServiceById(sid);
-
-    // Agregar el servicio a la reserva
-    const reservaActualizada = await bookingManager.addServiceToBooking(bid, sid);
+    const reservaActualizada = await bookingService.addServiceToBooking(bid, sid);
 
     return res.status(200).json({ status: 'success', data: reservaActualizada });
   } catch (error) {

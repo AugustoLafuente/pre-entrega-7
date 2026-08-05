@@ -1,6 +1,6 @@
-import { ServiceManager } from '../managers/ServiceManager.js';
+import { ServicesService } from '../services/services.service.js';
 
-const manager = new ServiceManager();
+const service = new ServicesService();
 
 const handleError = (error, res) => {
   if (error.message.includes('no existe')) {
@@ -14,7 +14,7 @@ const handleError = (error, res) => {
 
 export const getServices = async (req, res) => {
   try {
-    let services = await manager.getServices();
+    let services = await service.getServices();
     const { category, available } = req.query;
 
     if (category) {
@@ -35,13 +35,8 @@ export const getServices = async (req, res) => {
 export const getServiceById = async (req, res) => {
   try {
     const sid = parseInt(req.params.sid);
-    const service = await manager.getServiceById(sid);
-
-    if (!service) {
-      return res.status(404).json({ status: 'error', message: `Servicio con ID ${sid} no encontrado.` });
-    }
-
-    return res.status(200).json({ status: 'success', data: service });
+    const result = await service.getServiceById(sid);
+    return res.status(200).json({ status: 'success', data: result });
   } catch (error) {
     return handleError(error, res);
   }
@@ -50,15 +45,7 @@ export const getServiceById = async (req, res) => {
 export const createService = async (req, res) => {
   try {
     const serviceData = req.body;
-    const nuevoServicio = await manager.addService(serviceData);
-
-    if (!nuevoServicio) {
-      return res.status(400).json({ 
-        status: 'error', 
-        message: 'Todos los campos son obligatorios: name, description, duration, price, category, available.' 
-      });
-    }
-
+    const nuevoServicio = await service.createService(serviceData);
     return res.status(201).json({ status: 'success', data: nuevoServicio });
   } catch (error) {
     return handleError(error, res);
@@ -69,16 +56,7 @@ export const updateService = async (req, res) => {
   try {
     const sid = parseInt(req.params.sid);
     const updatedData = req.body;
-
-    const actualizado = await manager.updateService(sid, updatedData);
-
-    if (!actualizado) {
-      return res.status(404).json({ 
-        status: 'error', 
-        message: `No se pudo actualizar. El servicio con ID ${sid} no existe o intentaste modificar el id.` 
-      });
-    }
-
+    const actualizado = await service.updateService(sid, updatedData);
     return res.status(200).json({ status: 'success', data: actualizado });
   } catch (error) {
     return handleError(error, res);
@@ -88,12 +66,7 @@ export const updateService = async (req, res) => {
 export const deleteService = async (req, res) => {
   try {
     const sid = parseInt(req.params.sid);
-    const eliminado = await manager.deleteService(sid);
-
-    if (!eliminado) {
-      return res.status(404).json({ status: 'error', message: `El servicio con ID ${sid} no existe.` });
-    }
-
+    const eliminado = await service.deleteService(sid);
     return res.status(200).json({ status: 'success', message: 'Servicio eliminado correctamente.', data: eliminado });
   } catch (error) {
     return handleError(error, res);
