@@ -8,6 +8,10 @@ export class BookingsService {
     this.servicesService = new ServicesService();
   }
 
+  async getAllBookings() {
+    return await this.repository.getAll();
+  }
+
   async createBooking(bookingData) {
     const { clientName, clientEmail, date, time, status, services } = bookingData;
 

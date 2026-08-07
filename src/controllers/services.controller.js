@@ -47,6 +47,13 @@ export const createService = async (req, res) => {
   try {
     const serviceData = req.body;
     const nuevoServicio = await service.createService(serviceData);
+
+    // Emitir evento por Socket.io
+    const io = req.app.get('socketio');
+    if (io) {
+      io.emit('newService', nuevoServicio);
+    }
+
     return res.status(201).json({ status: 'success', data: nuevoServicio });
   } catch (error) {
     return handleError(error, res);

@@ -1,6 +1,10 @@
 import { BookingModel } from '../models/booking.model.js';
 
 export class BookingsDao {
+  async getAll() {
+    return await BookingModel.find().populate('services.service').lean();
+  }
+
   async create(bookingData) {
     const newBooking = await BookingModel.create(bookingData);
     return newBooking.toObject();

@@ -1,0 +1,22 @@
+<h2>{{title}}</h2>
+<p>Listado de reservas en el sistema:</p>
+
+<div class="bookings-container">
+  {{#each bookings}}
+    <div class="card booking-card">
+      <h3>Reserva para: {{this.clientName}}</h3>
+      <p><strong>Email:</strong> {{this.clientEmail}}</p>
+      <p><strong>Fecha:</strong> {{this.date}} a las {{this.time}}</p>
+      <p><strong>Estado:</strong> <span class="badge {{this.status}}">{{this.status}}</span></p>
+      
+      <h4>Servicios Solicitados:</h4>
+      <ul>
+        {{#each this.services}}
+          <li>{{this.quantity}}x {{this.service.name}} (${{this.service.price}})</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    <p>No hay reservas en el sistema en este momento.</p>
+  {{/each}}
+</div>
