@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const requiredEnvs = ['PORT', 'NODE_ENV'];
+const requiredEnvs = ['PORT', 'NODE_ENV', 'MONGO_URI'];
 const missingEnvs = requiredEnvs.filter((env) => !process.env[env]);
 
 if (missingEnvs.length > 0) {
@@ -17,6 +17,7 @@ if (missingEnvs.length > 0) {
 export const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
+  mongoUri: process.env.MONGO_URI,
 };
 
 export default config;

@@ -1,4 +1,5 @@
 import { ServicesRepository } from '../repositories/services.repository.js';
+import { NotFoundError, ValidationError } from '../utils/errors.js';
 
 export class ServicesService {
   constructor() {
@@ -12,7 +13,7 @@ export class ServicesService {
   async getServiceById(id) {
     const service = await this.repository.getById(id);
     if (!service) {
-      throw new Error(`El servicio con ID ${id} no existe.`);
+      throw new NotFoundError(`El servicio con ID ${id} no existe.`);
     }
     return service;
   }
@@ -28,7 +29,7 @@ export class ServicesService {
       category === undefined ||
       available === undefined
     ) {
-      throw new Error('Todos los campos son obligatorios: name, description, duration, price, category, available.');
+      throw new ValidationError('Todos los campos son obligatorios: name, description, duration, price, category, available.');
     }
 
     return await this.repository.create({ name, description, duration, price, category, available });
@@ -38,11 +39,11 @@ export class ServicesService {
     // Primero, verificamos que el servicio existe
     const serviceExists = await this.repository.getById(id);
     if (!serviceExists) {
-      throw new Error(`El servicio con ID ${id} no existe.`);
+      throw new NotFoundError(`El servicio con ID ${id} no existe.`);
     }
 
-    if (updatedData.id !== undefined && updatedData.id !== id) {
-      throw new Error('No está permitido modificar el ID de un servicio.');
+    if (updatedData.id !== undefined || updatedData._id !== undefined) {
+      throw new ValidationError('No está permitido modificar el ID de un servicio.');
     }
 
     const { id: _, ...allowedData } = updatedData;
@@ -53,7 +54,7 @@ export class ServicesService {
   async deleteService(id) {
     const deletedService = await this.repository.delete(id);
     if (!deletedService) {
-      throw new Error(`El servicio con ID ${id} no existe.`);
+      throw new NotFoundError(`El servicio con ID ${id} no existe.`);
     }
     return deletedService;
   }

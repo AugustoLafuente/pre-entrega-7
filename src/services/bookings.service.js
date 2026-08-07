@@ -1,5 +1,6 @@
 import { BookingsRepository } from '../repositories/bookings.repository.js';
 import { ServicesService } from './services.service.js';
+import { NotFoundError, ValidationError } from '../utils/errors.js';
 
 export class BookingsService {
   constructor() {
@@ -11,13 +12,14 @@ export class BookingsService {
     const { clientName, clientEmail, date, time, status, services } = bookingData;
 
     if (!clientName || !clientEmail || !date || !time || !status) {
-      throw new Error('Los campos clientName, clientEmail, date, time y status son obligatorios.');
+      throw new ValidationError('Los campos clientName, clientEmail, date, time y status son obligatorios.');
     }
 
     const cleanServices = [];
     if (services && Array.isArray(services)) {
       for (const s of services) {
-        const sid = typeof s === 'object' && s.service ? s.service : (typeof s === 'number' ? s : parseInt(s));
+        // En MongoDB el ID es un string, no usar parseInt
+        const sid = typeof s === 'object' && s.service ? s.service : s;
         const qty = typeof s === 'object' && s.quantity ? s.quantity : 1;
         
         // Verifica existencia, si no existe arrojará error gracias a servicesService
@@ -40,7 +42,7 @@ export class BookingsService {
   async getBookingById(id) {
     const booking = await this.repository.getById(id);
     if (!booking) {
-      throw new Error(`La reserva con ID ${id} no existe.`);
+      throw new NotFoundError(`La reserva con ID ${id} no existe.`);
     }
     return booking;
   }
@@ -53,7 +55,7 @@ export class BookingsService {
     await this.servicesService.getServiceById(sid);
 
     // 3. Regla de negocio: si el mismo servicio se agrega dos veces, se incrementa quantity
-    const serviceIndex = booking.services.findIndex(s => s.service === sid);
+    const serviceIndex = booking.services.findIndex(s => s.service.toString() === sid.toString());
 
     if (serviceIndex !== -1) {
       booking.services[serviceIndex].quantity += 1;

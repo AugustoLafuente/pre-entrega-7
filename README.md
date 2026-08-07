@@ -9,7 +9,7 @@ El proyecto está organizado en cinco capas principales (siguiendo el patrón MV
 - **Controllers (`src/controllers`)**: Se encargan de procesar las solicitudes HTTP (`req`), llamar a los servicios y devolver la respuesta con su respectivo status HTTP (`res`).
 - **Services (`src/services`)**: Contienen toda la lógica de negocio, validaciones y reglas (como el incremento de cantidad si el servicio ya existe en la reserva). Desconocen por completo a Express (`req`/`res`).
 - **Repositories (`src/repositories`)**: Capa intermedia que sirve de puente entre los servicios y la persistencia de datos (DAO). Facilita cambiar el origen de datos en el futuro.
-- **DAO - Data Access Object (`src/dao`)**: Encargados directos de leer y escribir la información. En esta versión utilizan el File System para escribir sobre los JSON de `src/data/`.
+- **DAO - Data Access Object (`src/dao`)**: Encargados directos de leer y escribir la información. En esta versión utilizan **MongoDB Atlas** a través de **Mongoose** como ODM.
 
 ## Instalación
 
@@ -21,7 +21,9 @@ El proyecto está organizado en cinco capas principales (siguiendo el patrón MV
    ```text
    PORT=8080
    NODE_ENV=development
+   MONGO_URI=mongodb://localhost:27017/turnos_reservas
    ```
+3. Asegúrate de tener una instancia de MongoDB ejecutándose.
 
 ## Ejecución
 
@@ -87,13 +89,13 @@ npm start
     "status": "pending",
     "services": [
       {
-        "service": 1,
+        "service": "6a7653bd37c071bfcc289006",
         "quantity": 2
       }
     ]
   }
   ```
-  *(El array `services` es opcional, pero si se envía, el backend valida que los servicios existan en el `ServiceManager` y sanea el formato a `{ service, quantity }`)*
+  *(El array `services` es opcional, pero si se envía, el backend valida que los servicios existan y sanea el formato)*
 - **Código de respuesta**: `201 Created` si tiene éxito / `400 Bad Request` si faltan campos principales / `404 Not Found` si se provee un ID de servicio inexistente.
 
 ### 2. Obtener una reserva por ID
